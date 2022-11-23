@@ -21,6 +21,7 @@ class PackageFactory extends Factory
         $name =fake()->name();
         return [
             'name' => $name,
+            'duration' => rand(10, 100),
             'code' => Str::of($name)->slug('-'),
             'price' => rand(1000,9999)
         ];

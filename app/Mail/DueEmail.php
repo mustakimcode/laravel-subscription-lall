@@ -7,7 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class DueEMail extends Mailable
+class DueEmail extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -30,7 +30,7 @@ class DueEMail extends Mailable
      */
     public function build()
     {
-        return $this->subject('Mail from websitepercobaan.com')
+        return $this->subject('Subscription is About to end!')
             ->view('emails.due');
     }
 }
