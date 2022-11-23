@@ -15,7 +15,7 @@ jobs:
       - name: NPM Build
         run: |
           npm install
-          npm run prod
+          npm run build
       - name: Put built assets in Artifacts
         uses: actions/upload-artifact@v1
         with:
@@ -37,7 +37,7 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@master
         with:
-          php-version: '8.0'
+          php-version: '8.1'
           extension-csv: mbstring, bcmath
       - name: Composer install
         run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
