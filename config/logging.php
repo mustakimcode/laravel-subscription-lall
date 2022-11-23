@@ -70,6 +70,17 @@ return [
             'days' => 14,
         ],
 
+        'due-subscription-email' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/due-subscription-email.log'),
+            'level' => 'info',
+        ],
+        'due-subscription-sms' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/due-subscription-sms.log'),
+            'level' => 'info',
+        ],
+
         'slack' => [
             'driver' => 'slack',
             'url' => env('LOG_SLACK_WEBHOOK_URL'),

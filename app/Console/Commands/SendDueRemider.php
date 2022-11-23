@@ -44,21 +44,35 @@ class SendDueRemider extends Command
         $client = new Client($sid, $token);
 
         foreach ($userPackages as $key => $value) {
-            //should send email and sms notification here
-            $details = [
-                'title' => 'Your Subscription About to ended',
-                'body' => 'Hi, your subscription will end at ' . date("Y-m-d", strtotime($value->expired_date))
-            ];
+            try {
+                echo "send email to " . $value->user->email . " !!\r\n";
 
-            \Mail::to($value->user->email)->send(new \App\Mail\DueEMail($details));
+                //should send email and sms notification here
+                $details = [
+                    'title' => 'Your Subscription About to ended',
+                    'body' => 'Hi, your subscription will end at ' . date("Y-m-d", strtotime($value->expired_date))
+                ];
+                \Mail::to($value->user->email)->send(new \App\Mail\DueEMail($details));
+                \Log::channel('due-subscription-email')->info("email sent to " . $value->user->email);
+            } catch (\Throwable $th) {
+                \Log::channel('due-subscription-email')->error($th);
+            }
 
-            $client->messages->create(
-                $value->user->phone_number, // Text this number
-                [
-                    'from' => env('TWILIO_PHONE_NUMBER', ''),
-                    'body' => 'Hello from Twilio!'
-                ]
-            );
+
+            try {
+                echo "send sms to " . $value->user->phone_number . " !!\r\n";
+
+                $client->messages->create(
+                    $value->user->phone_number, // Text this number
+                    [
+                        'from' => env('TWILIO_PHONE_NUMBER', ''),
+                        'body' => 'Hi ' . $value->user->name . ', your subscription is baout to ended'
+                    ]
+                );
+                \Log::channel('due-subscription-sms')->info("sms sent to " . $value->user->email);
+            } catch (\Throwable $th) {
+                \Log::channel('due-subscription-sms')->error($th);
+            }
         }
         return Command::SUCCESS;
     }
